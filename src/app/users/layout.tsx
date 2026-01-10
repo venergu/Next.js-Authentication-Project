@@ -1,6 +1,7 @@
 import { Text } from "@radix-ui/themes";
+import { ReactNode } from "react";
 
-export default function RootLayout({ children }) {
+export default function UsersLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <header style={{ padding: "10px", background: "#eee" }}>

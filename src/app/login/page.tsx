@@ -5,8 +5,8 @@ import { AuthContext } from "../context/AuthContext";
 import { useContext, useEffect, useState } from "react";
 
 export default function LoginPage() {
-  const { isLoggedIn, login } = useContext(AuthContext);
-  const [loginName, setLoginName] = useState(null);
+  const { isLoggedIn } = useContext(AuthContext);
+  const [loginName, setLoginName] = useState<string | null>(null);
 
   useEffect(() => {
     setLoginName(localStorage.getItem("loginName"));
@@ -17,7 +17,7 @@ export default function LoginPage() {
       <h1>Login</h1>
 
       {!isLoggedIn ? (
-        <LoginForm onLogin={login} />
+        <LoginForm />
       ) : (
         <>
           <p>Jesteś już zalogowany, {loginName}</p>

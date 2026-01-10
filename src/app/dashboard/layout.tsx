@@ -1,4 +1,6 @@
-export default function RootLayout({ children }) {
+import { ReactNode } from "react";
+
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <div style={{ display: "flex" }}>
       <aside style={{ width: "200px", background: "#ddd", padding: "10px" }}>

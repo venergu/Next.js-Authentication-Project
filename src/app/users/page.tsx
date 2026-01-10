@@ -1,9 +1,16 @@
 import { Text } from "@radix-ui/themes";
 
-async function getUsers() {
-  const res = await fetch("/api/users", {
+interface User {
+  id: number;
+  name: string;
+  age: number;
+}
+
+async function getUsers(): Promise<User[]> {
+  const res = await fetch("http://localhost:3000/api/users", {
     headers: { "x-frontend-request": "true" },
   });
+  if (!res.ok) return [];
   return res.json();
 }
 

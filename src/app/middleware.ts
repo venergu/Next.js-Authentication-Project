@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(req) {
+export function middleware(req: NextRequest) {
   const isLoggedIn = req.cookies.get("isLoggedIn")?.value;
   const path = req.nextUrl.pathname;
 

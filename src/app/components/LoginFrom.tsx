@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useState } from "react";
+import { useContext, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "../context/AuthContext";
 
@@ -10,10 +10,10 @@ export default function LoginForm() {
   const [password, setPassword] = useState("1234");
   const [message, setMessage] = useState("");
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     try {
-      const res = await fetch("/api/route", {
+      const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ login, password }),

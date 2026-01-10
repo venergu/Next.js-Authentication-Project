@@ -6,7 +6,9 @@ import { AuthProvider } from "./context/AuthContext";
 import "@radix-ui/themes/styles.css";
 import { Theme, TabNav } from "@radix-ui/themes";
 import "./globals.css";
-export default function RootLayout({ children }) {
+import { ReactNode } from "react";
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   return (

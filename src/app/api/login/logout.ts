@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 export function POST() {
-  const res = NextResponse(
-    JSON.stringify({ sucess: true, message: "Wylogowano!" })
+  const res = NextResponse.json(
+    { success: true, message: "Wylogowano!" }
   );
 
   res.cookies.set({
@@ -10,7 +10,7 @@ export function POST() {
     value: "",
     path: "/",
     httpOnly: true,
-    magAge: 0,
+    maxAge: 0,
     sameSite: "lax",
   });
 

@@ -1,8 +1,15 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
 import { Button, Text } from "@radix-ui/themes";
-export default function UserCard({ name, age, id, onDelete }) {
+
+interface UserCardProps {
+  name: string;
+  age: number;
+  id: number;
+  onDelete: (id: number) => void;
+}
+
+export default function UserCard({ name, age, id, onDelete }: UserCardProps) {
   return (
     <div style={{ border: "1px solid #ccc", borderRadius: "8px", margin: "10px 0", padding: "10px" }}>
       <Text as="div" size="4" weight="bold">

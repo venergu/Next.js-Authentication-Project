@@ -1,12 +1,21 @@
 "use client";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from "react";
 
-export const AuthContext = createContext({
+interface AuthContextType {
+  isLoggedIn: boolean;
+  setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+}
+
+export const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   setIsLoggedIn: () => {},
 });
 
-export function AuthProvider({ children }) {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -15,6 +24,7 @@ export function AuthProvider({ children }) {
       .then((data) => setIsLoggedIn(data.isLoggedIn))
       .catch(() => setIsLoggedIn(false));
   }, []);
+
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
       {children}

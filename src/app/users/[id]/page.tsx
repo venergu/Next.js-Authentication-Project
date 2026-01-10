@@ -4,19 +4,28 @@ import Link from "next/link";
 import { useState, useEffect, Suspense } from "react";
 import { Text } from "@radix-ui/themes";
 
+interface User {
+  id: number;
+  name: string;
+  age: number;
+}
+
 export default function UserDetails() {
   const params = useParams();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     async function fetchUser() {
-      const res = await fetch("/api/users", {
-        headers: { "x-frontend-request": "true" },
-        next: { revalidate: 10 },
-      });
-      const data = await res.json();
-      const found = data.find((u) => u.id === parseInt(params.id));
-      setUser(found || null);
+      try {
+        const res = await fetch("/api/users", {
+          headers: { "x-frontend-request": "true" },
+        });
+        const data: User[] = await res.json();
+        const found = data.find((u) => u.id === parseInt(params.id as string));
+        setUser(found || null);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     fetchUser();

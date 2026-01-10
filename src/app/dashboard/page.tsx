@@ -7,10 +7,16 @@ import UserCard from "../components/UserCard";
 import { Text, Button } from "@radix-ui/themes";
 import { useLogout } from "../hooks/useLogout";
 
+interface User {
+  id: number;
+  name: string;
+  age: number;
+}
+
 export default function DashboardPage() {
   const router = useRouter();
   const { isLoggedIn } = useContext(AuthContext);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const logout = useLogout();
 
   useEffect(() => {
@@ -38,7 +44,7 @@ export default function DashboardPage() {
     fetchUsers();
   }, [isLoggedIn]);
 
-  const onDelete = (id) => {
+  const onDelete = (id: number) => {
     setUsers((prev) => prev.filter((user) => user.id !== id));
   };
 
@@ -51,7 +57,7 @@ export default function DashboardPage() {
 
   return (
     <section>
-      <Text as="h1" size="8" weight="bold" mb="4">
+      <Text as="div" size="8" weight="bold" mb="4">
         Witaj na stronie po zalogowaniu!
       </Text>
 

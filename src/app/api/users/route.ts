@@ -1,13 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-async function getUsers() {
+interface User {
+  id: number;
+  name: string;
+  age: number;
+}
+
+async function getUsers(): Promise<User[]> {
   return [
     { id: 1, name: "Jan", age: 12 },
     { id: 2, name: "Grzegorz", age: 25 },
   ];
 }
 
-export async function GET(req) {
+export async function GET(req: NextRequest) {
   const allowFrontend = req.headers.get("x-frontend-request");
 
   if (allowFrontend !== "true") {
