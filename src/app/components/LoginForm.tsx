@@ -1,32 +1,21 @@
 "use client";
-import { useContext, useState, FormEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../context/auth/useAuth";
 
 export default function LoginForm() {
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { login: performLogin } = useAuth();
   const router = useRouter();
-  const [login, setLogin] = useState("admin");
-  const [password, setPassword] = useState("1234");
-  const [message, setMessage] = useState("");
+  const [login, setLogin] = useState<string>("admin");
+  const [password, setPassword] = useState<string>("1234");
+  const [message, setMessage] = useState<string>("");
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ login, password }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        setIsLoggedIn(true);
-        router.push("/dashboard");
-      } else {
-        setMessage(data.message);
-      }
+      await performLogin(login, password);
+      router.push("/dashboard");
     } catch (err) {
       console.error(err);
       setMessage("Błąd połączenia z serwerem...");

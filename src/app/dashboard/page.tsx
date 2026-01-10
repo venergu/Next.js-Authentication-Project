@@ -1,22 +1,16 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AuthContext } from "../context/AuthContext";
 import UserCard from "../components/UserCard";
 import { Text, Button } from "@radix-ui/themes";
 import { useLogout } from "../hooks/useLogout";
-
-interface User {
-  id: number;
-  name: string;
-  age: number;
-}
+import { useAuth } from "../context/auth/useAuth";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { isLoggedIn } = useContext(AuthContext);
-  const [users, setUsers] = useState<User[]>([]);
+  const { isLoggedIn, loginName } = useAuth();
+  const [users, setUsers] = useState([]);
   const logout = useLogout();
 
   useEffect(() => {
@@ -44,7 +38,7 @@ export default function DashboardPage() {
     fetchUsers();
   }, [isLoggedIn]);
 
-  const onDelete = (id: number) => {
+  const onDelete = (id) => {
     setUsers((prev) => prev.filter((user) => user.id !== id));
   };
 
@@ -57,8 +51,8 @@ export default function DashboardPage() {
 
   return (
     <section>
-      <Text as="div" size="8" weight="bold" mb="4">
-        Witaj na stronie po zalogowaniu!
+      <Text as="h1" size="8" weight="bold" mb="4">
+        Witaj {loginName} na stronie po zalogowaniu!
       </Text>
 
       <Button onClick={handleLogout} mb="4">

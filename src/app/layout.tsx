@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/auth/AuthProvider";
 import "@radix-ui/themes/styles.css";
 import { Theme, TabNav } from "@radix-ui/themes";
 import "./globals.css";
