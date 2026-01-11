@@ -2,43 +2,32 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import UserCard from "../components/UserCard";
-import { Text, Button } from "@radix-ui/themes";
-import { useLogout } from "../hooks/useLogout";
+import { UserCard } from "../components/UserCard";
+import { Button, Heading } from "@radix-ui/themes";
 import { useAuth } from "../context/auth/useAuth";
+import { UserApi } from "../lib/users/api";
+import type { User } from "../lib/users/types";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { isLoggedIn, loginName } = useAuth();
-  const [users, setUsers] = useState([]);
-  const logout = useLogout();
+  const { user, logout } = useAuth();
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!user) {
       router.replace("/login");
     }
-  }, [isLoggedIn, router]);
+  }, [user, router]);
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!user) return;
 
-    async function fetchUsers() {
-      try {
-        const res = await fetch("/api/users", {
-          headers: { "x-frontend-request": "true" },
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        setUsers(data);
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    UserApi.getUsers().then(setUsers).catch(console.error);
+  }, [user]);
 
-    fetchUsers();
-  }, [isLoggedIn]);
+  if (!user) return null;
 
-  const onDelete = (id) => {
+  const onDelete = (id: number) => {
     setUsers((prev) => prev.filter((user) => user.id !== id));
   };
 
@@ -47,13 +36,11 @@ export default function DashboardPage() {
     router.replace("/login");
   };
 
-  if (!isLoggedIn) return null;
-
   return (
     <section>
-      <Text as="h1" size="8" weight="bold" mb="4">
-        Witaj {loginName} na stronie po zalogowaniu!
-      </Text>
+      <Heading as="h1" size="8" weight="bold" mb="4">
+        Witaj {user.name} na stronie po zalogowaniu!
+      </Heading>
 
       <Button onClick={handleLogout} mb="4">
         Wyloguj
@@ -67,10 +54,8 @@ export default function DashboardPage() {
         users.map((user) => (
           <UserCard
             key={user.id}
-            id={user.id}
-            name={user.name}
-            age={user.age}
-            onDelete={onDelete}
+            user={user}
+            onDelete={() => onDelete(user.id)}
           />
         ))
       )}

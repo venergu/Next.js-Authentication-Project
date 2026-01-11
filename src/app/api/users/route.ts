@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 
-async function getUsers() {
-  return [
+const users = new Map(
+  [
     { id: 1, name: "Jan", age: 12 },
     { id: 2, name: "Grzegorz", age: 25 },
-  ];
-}
+  ].map((user) => [user.id, user])
+);
+
+const getUsers = async () => Array.from(users.values());
+
+const deleteUser = async () => {}; // Todo(task): Implement API endpoint & Frontend.
 
 export async function GET() {
   // middleware handles auth

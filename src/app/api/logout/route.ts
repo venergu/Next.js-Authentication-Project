@@ -5,8 +5,5 @@ export async function POST() {
 
   res.cookies.delete("token");
 
-  res.cookies.delete("isLoggedIn");
-  res.cookies.delete("login");
-
   return res;
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Counter from "./Counter";
+import { Counter } from "./components/Counter";
 import { Text } from "@radix-ui/themes";
 
 export default function Home() {
@@ -14,8 +14,11 @@ export default function Home() {
       >
         Strona główna
       </Text>
+
       <Counter />
+
       <br />
+
       <Link href="/login">
         <Text color="blue" highContrast>
           Przejdź do logowania

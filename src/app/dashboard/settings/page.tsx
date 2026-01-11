@@ -1,4 +1,5 @@
 import { Text } from "@radix-ui/themes";
+
 export default function Settings() {
   return (
     <div>

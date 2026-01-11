@@ -1,5 +1,5 @@
 import { Text } from "@radix-ui/themes";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export default function UsersLayout({ children }: { children: ReactNode }) {
   return (
@@ -9,6 +9,7 @@ export default function UsersLayout({ children }: { children: ReactNode }) {
           Użytkownicy
         </Text>
       </header>
+
       <section style={{ padding: "10px" }}>{children}</section>
     </>
   );
