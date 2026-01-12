@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Button, Text } from "@radix-ui/themes";
-export default function Counter() {
+
+export const Counter = () => {
   const [count, setCount] = useState(0);
 
   return (
@@ -11,7 +12,7 @@ export default function Counter() {
         Licznik: {count}
       </Text>
 
-      <Button variant="classic" onClick={() => setCount(count + 1)} mr="2">
+      <Button variant="classic" onClick={() => setCount((c) => c + 1)} mr="2">
         Dodaj
       </Button>
 
@@ -20,4 +21,4 @@ export default function Counter() {
       </Button>
     </>
   );
-}
+};

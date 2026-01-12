@@ -1,31 +1,38 @@
 "use client";
 import Link from "next/link";
 import { Button, Text } from "@radix-ui/themes";
+import type { User } from "../lib/users/types";
 
-interface UserCardProps {
-  name: string;
-  age: number;
-  id: number;
-  onDelete: (id: number) => void;
-}
+type Props = {
+  user: User;
+  onDelete: () => void;
+};
 
-export default function UserCard({ name, age, id, onDelete }: UserCardProps) {
-  return (
-    <div style={{ border: "1px solid #ccc", borderRadius: "8px", margin: "10px 0", padding: "10px" }}>
-      <Text as="div" size="4" weight="bold">
-        {name}
+export const UserCard = ({ user: { name, age, id }, onDelete }: Props) => (
+  <div
+    style={{
+      border: "1px solid #ccc",
+      borderRadius: "8px",
+      margin: "10px 0",
+      padding: "10px",
+    }}
+  >
+    <Text as="div" size="4" weight="bold">
+      {name}
+    </Text>
+
+    <Text as="p" size="2" color="gray" mb="2">
+      Wiek: {age}
+    </Text>
+
+    <Link href={`/users/${id}`}>
+      <Text color="blue" highContrast size="2" mr="4">
+        Szczegóły
       </Text>
-      <Text as="p" size="2" color="gray" mb="2">
-        Wiek: {age}
-      </Text>
-      <Link href={`/users/${id}`}>
-        <Text color="blue" highContrast size="2" mr="4">
-          Szczegóły
-        </Text>
-      </Link>
-      <Button variant="soft" color="red" size="1" onClick={() => onDelete(id)}>
-        Usuń
-      </Button>
-    </div>
-  );
-}
+    </Link>
+
+    <Button variant="soft" color="red" size="1" onClick={onDelete}>
+      Usuń
+    </Button>
+  </div>
+);

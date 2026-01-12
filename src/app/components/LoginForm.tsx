@@ -1,20 +1,51 @@
 "use client";
-import React, { useState, FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/auth/useAuth";
 
-export default function LoginForm() {
-  const { login: performLogin } = useAuth();
-  const router = useRouter();
-  const [login, setLogin] = useState<string>("admin");
-  const [password, setPassword] = useState<string>("1234");
-  const [message, setMessage] = useState<string>("");
+const DEFAULT_LOGIN = process.env["LOGIN"];
+const DEFAULT_PASSWORD = process.env["PASSWORD"];
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+const style = {
+  form: { display: "flex", flexDirection: "column", gap: "12px" },
+  input: { padding: "8px", fontSize: "16px" },
+  msg: { color: "red" },
+} as const;
+
+const inputs = {
+  login: {
+    type: "text",
+    name: "login",
+    placeholder: "Wpisz login",
+    defaultValue: DEFAULT_LOGIN,
+    required: true,
+    style: style.input,
+  },
+  password: {
+    type: "password",
+    name: "password",
+    placeholder: "Hasło",
+    defaultValue: DEFAULT_PASSWORD,
+    required: true,
+    style: style.input,
+  },
+} as const;
+
+export default function LoginForm() {
+  const auth = useAuth();
+  const router = useRouter();
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const login = formData.get("login")?.toString() ?? "";
+    const password = formData.get("password")?.toString() ?? "";
 
     try {
-      await performLogin(login, password);
+      await auth.login(login, password);
+
       router.push("/dashboard");
     } catch (err) {
       console.error(err);
@@ -23,31 +54,16 @@ export default function LoginForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-    >
-      <input
-        type="text"
-        placeholder="Wpisz login"
-        value={login}
-        onChange={(e) => setLogin(e.target.value)}
-        required
-        style={{ padding: "8px", fontSize: "16px" }}
-      />
-
-      <input
-        type="password"
-        placeholder="Hasło"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        style={{ padding: "8px", fontSize: "16px" }}
-      />
+    <form onSubmit={handleSubmit} style={style.form}>
+      <input {...inputs.login} />
+      <input {...inputs.password} />
 
       <button type="submit">Zaloguj</button>
 
-      {message && <p style={{ color: "red" }}>{message}</p>}
+      <Message msg={message} />
     </form>
   );
 }
+
+const Message = ({ msg }: { msg: string }) =>
+  msg ? <p style={style.msg}>{msg}</p> : null;

@@ -1,35 +1,28 @@
 "use client";
-import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { Text } from "@radix-ui/themes";
-
-interface User {
-  id: number;
-  name: string;
-  age: number;
-}
+import type { User } from "@/app/lib/users/types";
+import { UserApi } from "@/app/lib/users/api";
 
 export default function UserDetails() {
-  const params = useParams();
+  const userId = useParams().id;
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch("/api/users", {
-          headers: { "x-frontend-request": "true" },
-        });
-        const data: User[] = await res.json();
-        const found = data.find((u) => u.id === parseInt(params.id as string));
-        setUser(found || null);
+        const users = await UserApi.getUsers();
+        const user = users?.find((u) => u.id.toString() === userId) ?? null;
+        setUser(user);
       } catch (err) {
         console.error(err);
       }
     }
 
     fetchUser();
-  }, [params.id]);
+  }, [userId]);
 
   if (!user) {
     return <Text>Ładowanie użytkownika...</Text>;
@@ -41,9 +34,11 @@ export default function UserDetails() {
         <Text as="div" size="4" weight="bold" mb="2">
           Profil użytkownika
         </Text>
-        <Text as="p">Id użytkownika: {params.id}</Text>
+
+        <Text as="p">Id użytkownika: {userId}</Text>
         <Text as="p">Imię: {user.name}</Text>
         <Text as="p">Wiek: {user.age}</Text>
+
         <Link href="/dashboard">
           <Text color="blue" highContrast>
             Powrót do panelu

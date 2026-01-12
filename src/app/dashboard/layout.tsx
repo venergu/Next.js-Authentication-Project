@@ -10,6 +10,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <a href="/dashboard/settings">Ustawienia</a>
         </nav>
       </aside>
+
       <section style={{ flex: 1, padding: "10px" }}>{children}</section>
     </div>
   );

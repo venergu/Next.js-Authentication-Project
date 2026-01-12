@@ -1,83 +1,66 @@
 import { NextResponse, NextRequest } from "next/server";
-import { cookies } from "next/headers";
+import argon2 from "argon2";
+import jwt from "jsonwebtoken";
+import { Config } from "@/app/lib/Config";
+import { Cookie } from "@/app/lib/Cookie";
 
-const mockedUser = {
-  loginName: "Mocked user",
-  name: "Mocked user",
-  isLoggedIn: true,
+type Credentials = { login: string; password: string };
+const verifyCredentials = async (
+  provided: Credentials,
+  expected: Credentials
+) => {
+  // This hash should be comming from database.
+  const hash = await argon2.hash(expected.password, {
+    type: argon2.argon2id,
+    memoryCost: 19456,
+    timeCost: 2,
+    parallelism: 1,
+  });
+
+  const isValidPassword = await argon2.verify(hash, provided.password);
+  const isValidLogin = provided.login === expected.login;
+
+  return isValidPassword && isValidLogin;
 };
-
-const jwt = {
-  verify: (token: string | undefined, secret: string | undefined) => {
-    if (!token) return null;
-    return mockedUser;
-  },
-};
-
-const JWT_SECRET = process.env["JWT_SECRET"] || "secret";
 
 export async function GET() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
+  const token = await Cookie.get("token");
 
-  const user = jwt.verify(token, JWT_SECRET);
+  if (!token) return new NextResponse(null, { status: 401 });
 
-  if (!user) {
-    return NextResponse.json({ user: null }, { status: 401 });
-  }
+  const user = jwt.verify(token, Config.jwt.secret);
 
-  return NextResponse.json({ user });
+  if (!user) return new NextResponse(null, { status: 401 });
+
+  return NextResponse.json(user);
 }
 
 export async function POST(req: NextRequest) {
   try {
     const { login, password } = await req.json();
 
-    const expectedLogin = process.env.login || "admin";
-    const expectedPassword = process.env.password || "1234";
+    const validCredentials = await verifyCredentials(
+      { login, password },
+      Config.user.credentials
+    );
 
-    if (login === expectedLogin && password === expectedPassword) {
-      const res = NextResponse.json({
-        ...mockedUser,
-        name: login,
-        success: true,
-        message: "Zalogowano!",
-      });
-
-      const cookieOptions = {
-        path: "/",
-        httpOnly: true,
-        sameSite: "lax" as const,
-        maxAge: 60 * 60 * 24,
-      };
-
-      res.cookies.set({
-        name: "token",
-        value: "some.jwt.here",
-        ...cookieOptions,
-      });
-
-      res.cookies.set({
-        name: "isLoggedIn",
-        value: "true",
-        ...cookieOptions,
-      });
-
-      res.cookies.set({
-        name: "login",
-        value: login,
-        ...cookieOptions,
-      });
-
-      return res;
-    } else {
+    if (!validCredentials) {
       return NextResponse.json(
         { success: false, message: "Błędny login lub hasło" },
         { status: 401 }
       );
     }
-  } catch (err) {
-    console.error(err);
+
+    const user = { name: login };
+    const token = jwt.sign(user, Config.jwt.secret, { expiresIn: "7d" });
+
+    const response = NextResponse.json(user);
+    response.cookies.set(Cookie.make("token", token));
+
+    return response;
+  } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
       { success: false, message: "Błąd serwera" },
       { status: 500 }
