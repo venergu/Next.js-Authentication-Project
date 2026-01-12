@@ -1,14 +1,11 @@
 export const AuthApi = {
-  async getCurrentUser(): Promise<CurrentUserSuccessfulResponse["user"]> {
+  async getCurrentUser(): Promise<AuthUserResponse> {
     const response = await fetch("/api/login");
     const data = await response.json();
-    return data.user;
+    return data;
   },
 
-  async login(
-    login: string,
-    password: string
-  ): Promise<LoginSuccessfulResponse> {
+  async login(login: string, password: string): Promise<AuthUserResponse> {
     const response = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -25,14 +22,6 @@ export const AuthApi = {
   },
 };
 
-type LoginSuccessfulResponse = {
-  success: true;
-  message: string;
+type AuthUserResponse = {
   name: string;
-};
-
-type CurrentUserSuccessfulResponse = {
-  user: {
-    name: string;
-  };
 };

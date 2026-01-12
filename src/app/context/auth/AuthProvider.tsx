@@ -10,6 +10,8 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<{ name: string } | null>(null);
 
+  console.log({ user });
+
   useEffect(() => {
     AuthApi.getCurrentUser()
       .then((user) => {
@@ -22,10 +24,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (login: string, password: string) => {
     const user = await AuthApi.login(login, password);
-    setUser({ name: user.name });
+    if (user) setUser({ name: user.name });
   };
 
-  const logout = async () => AuthApi.logout();
+  const logout = async () => AuthApi.logout().then(() => setUser(null));
 
   const value: AuthContextType = { user, login, logout };
 

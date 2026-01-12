@@ -4,8 +4,9 @@ export class Cookie {
   static options = {
     path: "/",
     httpOnly: true,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24,
+    secure: true,
+    sameSite: "strict",
+    maxAge: 60 * 60 * 24 * 7,
   } as const;
 
   static get = async (name: string) =>
