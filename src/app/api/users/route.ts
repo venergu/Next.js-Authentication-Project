@@ -20,3 +20,38 @@ export async function DELETE(req: Request) {
     NextResponse.json({ message: "Błąd serwera" }, { status: 500 });
   }
 }
+
+export async function POST(req: Request) {
+  try {
+    const { name, age } = await req.json();
+
+    if (!name || typeof name !== "string") {
+      return NextResponse.json(
+        { message: "Błąd, wpisz poprawne imię." },
+        { status: 400 },
+      );
+    }
+
+    const ageNumber = Number(age);
+    if (!age || isNaN(ageNumber)) {
+      return NextResponse.json(
+        { message: "Błąd, w miejscu wieku wpisz liczbę." },
+        { status: 400 },
+      );
+    }
+
+    const [result] = await db.query(
+      "INSERT INTO users (name, age) VALUES (?, ?)",
+      [name, age],
+    );
+
+    return NextResponse.json({
+      id: result.insertId,
+      name,
+      age,
+    });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ message: "Błąd serwera" }, { status: 500 });
+  }
+}

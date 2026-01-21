@@ -7,6 +7,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <nav>
           <a href="/dashboard">Dashboard</a>
           <br />
+          <a href="/dashboard/addUsers">Dodaj użytkownika</a>
+          <br />
           <a href="/dashboard/settings">Ustawienia</a>
         </nav>
       </aside>
