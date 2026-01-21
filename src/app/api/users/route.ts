@@ -10,3 +10,13 @@ export async function GET() {
     return NextResponse.json({ message: "Błąd serwera" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const { id } = await req.json();
+    await db.query("DELETE FROM users WHERE id = ?", [id]);
+    return NextResponse.json({ message: `Użytkownik o ${id} usunięty` });
+  } catch (err) {
+    NextResponse.json({ message: "Błąd serwera" }, { status: 500 });
+  }
+}

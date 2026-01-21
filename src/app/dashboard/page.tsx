@@ -27,7 +27,14 @@ export default function DashboardPage() {
 
   if (!user) return null;
 
-  const onDelete = (id: number) => {
+  const onDelete = async (id: number) => {
+    await fetch("/api/users", {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
     setUsers((prev) => prev.filter((user) => user.id !== id));
   };
 
