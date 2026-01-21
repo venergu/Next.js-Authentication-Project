@@ -6,8 +6,14 @@ export const UserApi = {
       headers: { "x-frontend-request": "true" },
     });
 
-    if (!res.ok) throw new Error("Response was not ok.");
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(
+        `Response was not ok. Status: ${res.status}, Message: ${text}`,
+      );
+    }
 
-    return await res.json();
+    const data: User[] = await res.json();
+    return data;
   },
 };
