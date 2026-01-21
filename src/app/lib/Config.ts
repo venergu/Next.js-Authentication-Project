@@ -10,4 +10,10 @@ export const Config = {
       password: Env.get("PASSWORD"),
     },
   },
+  database: {
+    host: Env.get("HOST"),
+    user: Env.get("USER"),
+    password: Env.get("PASSWORD"),
+    database: Env.get("DATABASE"),
+  },
 } as const;
