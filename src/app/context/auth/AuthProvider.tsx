@@ -10,8 +10,6 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<{ name: string } | null>(null);
 
-  console.log({ user });
-
   useEffect(() => {
     AuthApi.getCurrentUser()
       .then((user) => {
