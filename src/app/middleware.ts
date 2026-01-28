@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
-import { Config } from "./app/lib/Config";
+import { Config } from "./lib/Config";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
