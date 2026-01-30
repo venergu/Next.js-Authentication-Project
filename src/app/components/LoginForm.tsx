@@ -2,9 +2,13 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/auth/useAuth";
+<<<<<<< HEAD
 
 const DEFAULT_LOGIN = process.env["LOGIN"];
 const DEFAULT_PASSWORD = process.env["PASSWORD"];
+=======
+import { TextField, Button } from "@radix-ui/themes";
+>>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
 
 const style = {
   form: { display: "flex", flexDirection: "column", gap: "12px" },
@@ -13,11 +17,18 @@ const style = {
 } as const;
 
 const inputs = {
+<<<<<<< HEAD
   login: {
     type: "text",
     name: "login",
     placeholder: "Wpisz login",
     defaultValue: DEFAULT_LOGIN,
+=======
+  email: {
+    type: "email",
+    name: "email",
+    placeholder: "Wpisz email",
+>>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
     required: true,
     style: style.input,
   },
@@ -25,7 +36,10 @@ const inputs = {
     type: "password",
     name: "password",
     placeholder: "Hasło",
+<<<<<<< HEAD
     defaultValue: DEFAULT_PASSWORD,
+=======
+>>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
     required: true,
     style: style.input,
   },
@@ -40,6 +54,7 @@ export default function LoginForm() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
+<<<<<<< HEAD
     const login = formData.get("login")?.toString() ?? "";
     const password = formData.get("password")?.toString() ?? "";
 
@@ -50,15 +65,32 @@ export default function LoginForm() {
     } catch (err) {
       console.error(err);
       setMessage("Błąd połączenia z serwerem...");
+=======
+    const email = formData.get("email")?.toString() ?? "";
+    const password = formData.get("password")?.toString() ?? "";
+
+    try {
+      await auth.login(email, password);
+      router.push("/dashboard");
+    } catch (err) {
+      setMessage("Nieprawidłowy email lub hasło");
+>>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
     }
   }
 
   return (
     <form onSubmit={handleSubmit} style={style.form}>
+<<<<<<< HEAD
       <input {...inputs.login} />
       <input {...inputs.password} />
 
       <button type="submit">Zaloguj</button>
+=======
+      <TextField.Root {...inputs.email} />
+      <TextField.Root {...inputs.password} />
+
+      <Button type="submit">Zaloguj</Button>
+>>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
 
       <Message msg={message} />
     </form>

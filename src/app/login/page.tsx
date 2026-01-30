@@ -11,7 +11,14 @@ export default function LoginPage() {
       <h1>Login</h1>
 
       {!user ? (
+<<<<<<< HEAD
         <LoginForm />
+=======
+        <>
+          <LoginForm />
+          <Link href="/register">Zarejestruj się</Link>
+        </>
+>>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
       ) : (
         <>
           <p>Jesteś już zalogowany, {user.name}</p>

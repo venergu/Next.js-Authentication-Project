@@ -4,6 +4,11 @@ node_modules/
 yarn-error.log*
 yarn-debug.log*
 npm-debug.log*
+<<<<<<< HEAD
+=======
+package-lock.json
+yarn.lock
+>>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
 .pnpm-debug.log*
 
 .next/
