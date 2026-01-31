@@ -1,40 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-<<<<<<< HEAD
-import { Config } from "@/app/lib/Config";
-import { Cookie } from "@/app/lib/Cookie";
-
-type Credentials = { login: string; password: string };
-const verifyCredentials = async (
-  provided: Credentials,
-  expected: Credentials
-) => {
-  // This hash should be comming from database.
-  const hash = await argon2.hash(expected.password, {
-    type: argon2.argon2id,
-    memoryCost: 19456,
-    timeCost: 2,
-    parallelism: 1,
-  });
-
-  const isValidPassword = await argon2.verify(hash, provided.password);
-  const isValidLogin = provided.login === expected.login;
-
-  return isValidPassword && isValidLogin;
-};
-
-export async function GET() {
-  const token = await Cookie.get("token");
-
-  if (!token) return new NextResponse(null, { status: 401 });
-
-  const user = jwt.verify(token, Config.jwt.secret);
-
-  if (!user) return new NextResponse(null, { status: 401 });
-
-  return NextResponse.json(user);
-=======
 import { z } from "zod";
 import { Config } from "@/app/lib/Config";
 import { Cookie } from "@/app/lib/Cookie";
@@ -52,41 +18,10 @@ interface UserRow extends RowDataPacket {
   name: string;
   email: string;
   password: string;
->>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
 }
 
 export async function POST(req: NextRequest) {
   try {
-<<<<<<< HEAD
-    const { login, password } = await req.json();
-
-    const validCredentials = await verifyCredentials(
-      { login, password },
-      Config.user.credentials
-    );
-
-    if (!validCredentials) {
-      return NextResponse.json(
-        { success: false, message: "Błędny login lub hasło" },
-        { status: 401 }
-      );
-    }
-
-    const user = { name: login };
-    const token = jwt.sign(user, Config.jwt.secret, { expiresIn: "7d" });
-
-    const response = NextResponse.json(user);
-    response.cookies.set(Cookie.make("token", token));
-
-    return response;
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      { success: false, message: "Błąd serwera" },
-      { status: 500 }
-    );
-=======
     const body = await req.json();
     const validationResult = loginSchema.safeParse(body);
 
@@ -152,6 +87,7 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "Błąd serwera" }, { status: 500 });
   }
 }
@@ -185,15 +121,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         user: {
-          id: decoded.userId,
-          name: decoded.name,
-          email: decoded.email,
+          id: users[0].id,
+          name: users[0].name,
+          email: users[0].email,
         },
       },
       { status: 200 },
     );
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "Nieprawidłowy token" }, { status: 401 });
->>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
   }
 }

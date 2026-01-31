@@ -6,10 +6,7 @@ export async function GET() {
     const [rows] = await db.query("SELECT * FROM users");
     return NextResponse.json(rows);
   } catch (err) {
-<<<<<<< HEAD
     console.error(err);
-=======
->>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
     return NextResponse.json({ message: "Błąd serwera" }, { status: 500 });
   }
 }
@@ -54,10 +51,7 @@ export async function POST(req: Request) {
       age,
     });
   } catch (err) {
-<<<<<<< HEAD
     console.error(err);
-=======
->>>>>>> 1fd9388c6eddaad881888d2c41a42907f41907a2
     return NextResponse.json({ message: "Błąd serwera" }, { status: 500 });
   }
 }

@@ -4,12 +4,6 @@ export const Config = {
   jwt: {
     secret: Env.get("JWT_SECRET"),
   },
-  user: {
-    credentials: {
-      login: Env.get("LOGIN"),
-      password: Env.get("PASSWORD_USER"),
-    },
-  },
   database: {
     host: Env.get("DB_HOST"),
     user: Env.get("DB_USER"),
