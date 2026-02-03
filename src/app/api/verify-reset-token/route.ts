@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-    const [tokens] = await db.execute(
+    const [tokens] = await db.query(
       `SELECT token, user_email, expires_at, used FROM password_reset_tokens WHERE token = ?`,
       [token],
     );
