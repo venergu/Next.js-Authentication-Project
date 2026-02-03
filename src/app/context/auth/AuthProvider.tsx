@@ -12,8 +12,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     AuthApi.getCurrentUser()
-      .then((user) => {
-        if (user) setUser({ name: user.name });
+      .then((data) => {
+        if (data && data.user) {
+          setUser({ name: data.user.name });
+        } else {
+          setUser(null);
+        }
       })
       .catch(() => {
         setUser(null);

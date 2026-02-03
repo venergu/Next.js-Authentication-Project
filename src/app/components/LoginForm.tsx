@@ -14,7 +14,7 @@ const style = {
 
 const inputs = {
   login: {
-    type: "text",
+    type: "email",
     name: "login",
     placeholder: "Wpisz login",
     defaultValue: DEFAULT_LOGIN,

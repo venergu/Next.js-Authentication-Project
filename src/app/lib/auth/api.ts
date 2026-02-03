@@ -1,8 +1,10 @@
 export const AuthApi = {
   async getCurrentUser(): Promise<AuthUserResponse> {
     const response = await fetch("/api/login");
-    const data = await response.json();
-    return data;
+    if (!response.ok) {
+      return { error: "Brak aktywnej sesji" };
+    }
+    return await response.json();
   },
 
   async login(email: string, password: string): Promise<AuthUserResponse> {
