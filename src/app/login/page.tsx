@@ -13,6 +13,8 @@ export default function LoginPage() {
       {!user ? (
         <>
           <LoginForm />
+          <Link href="/forgot-password">Nie pamiętasz hasła?</Link>
+          <br />
           <Link href="/register">Zarejestruj się</Link>
         </>
       ) : (
